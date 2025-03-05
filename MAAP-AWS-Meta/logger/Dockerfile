@@ -2,7 +2,6 @@ FROM python:3.10-slim
 
 COPY ./requirements.txt /code/requirements.txt
 COPY ./main.py /code/main.py
-COPY .env /code/.env
 
 # Set up working directory
 WORKDIR /code

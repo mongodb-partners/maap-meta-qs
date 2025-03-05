@@ -9,7 +9,6 @@ COPY ./logger.py /code/logger.py
 COPY ./semantic_cache.py /code/semantic_cache.py
 COPY ./cache.py /code/cache.py
 COPY ./tools.py /code/tools.py
-COPY .env /code/.env
 
 # Set up working directory
 WORKDIR /code

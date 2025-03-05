@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/ksh
 
 cd main
 docker build  --tag 'main' .

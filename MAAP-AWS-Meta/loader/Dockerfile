@@ -5,7 +5,6 @@ COPY ./main.py /code/main.py
 COPY ./loader.py /code/loader.py
 COPY ./utils.py /code/utils.py
 COPY ./logger.py /code/logger.py
-COPY .env /code/.env
 
 USER root
 # Set up working directory

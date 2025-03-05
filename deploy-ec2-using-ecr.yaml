@@ -242,13 +242,9 @@ Resources:
           EOF
           }
 
-          build_docker_images() {
-              echo "Building Docker images..."
-              cd /home/ubuntu/MAAP-Files/MAAP-AWS-Meta || { echo "MAAP-AWS-Meta directory not found. Exiting."; exit 1; }
-              chmod +x build-images.ksh || echo "Failed to set executable permission for build-images.ksh."
-              if ! ./build-images.ksh; then
-                 { echo "Docker image build failed.  Exiting."; exit 1; }
-              fi
+          pull_docker_images() {
+              echo "Pulling Docker images..."
+              docker-compose pull || { echo "Docker Compose pull failed. Exiting."; exit 1; }
           }
 
           deploy_mongodb() {
@@ -282,7 +278,7 @@ Resources:
               echo "SemanticCache: $SEMANTIC_CACHE_REPLICAS"
               
               if ! docker-compose up -d; then
-                 { echo "Docker Compose failed to start services. Exiting."; exit 1; }
+                  { echo "Docker Compose failed to start services. Exiting."; exit 1; }
               fi
           }
 
@@ -292,14 +288,13 @@ Resources:
               configure_docker
               clone_repository
               setup_env_file
-              build_docker_images &
+              pull_docker_images &
               deploy_mongodb
               deploy_services
               echo "Instance initialization completed at $(date)."
           }
 
           main
-
 
 Outputs:
   InstanceId:

@@ -3,7 +3,6 @@ FROM python:3.10-slim
 COPY ./requirements.txt /code/requirements.txt
 COPY ./main.py /code/main.py
 COPY ./logger.py /code/logger.py
-COPY .env /code/.env
 
 USER root
 # Set up working directory

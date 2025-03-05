@@ -1,12 +1,16 @@
 services:
   logger:
     image: logger
+    env_file:
+      - .env
     environment:
       - PORT=8181
     deploy:
       replicas: ${LOGGER_REPLICAS:-3}
   loader:
     image: loader
+    env_file:
+      - .env
     environment:
       - PORT=8001
     depends_on:
@@ -15,6 +19,8 @@ services:
       replicas: ${LOADER_REPLICAS:-3}
   ai-memory:
     image: ai-memory
+    env_file:
+      - .env
     depends_on:
       - logger
     environment:
@@ -24,6 +30,8 @@ services:
 
   semantic-cache:
     image: semantic-cache
+    env_file:
+      - .env
     depends_on:
       - logger
     environment:
@@ -32,6 +40,8 @@ services:
       replicas: ${SEMANTIC_CACHE_REPLICAS:-3}
   main:
     image: main
+    env_file:
+      - .env
     depends_on:
       - logger
       - ai-memory
@@ -41,6 +51,8 @@ services:
       replicas: ${MAIN_REPLICAS:-3}
   ui:
     image: ui
+    env_file:
+      - .env
     depends_on:
       - loader
       - main

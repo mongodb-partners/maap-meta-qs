@@ -9,7 +9,7 @@ INFRA_STACK_NAME="MAAP-Meta-Stack-Infrastructure"
 EC2_STACK_NAME="MAAP-Meta-Stack-Compute"
 
 INFRA_TEMPLATE_FILE="deploy-infra.yaml"
-EC2_TEMPLATE_FILE="deploy-ec2.yaml"
+EC2_TEMPLATE_FILE="deploy-ec2-using-ecr.yaml" #Change to deploy-ec2.yaml if you want to build the images within the EC2 instance usng the application code from Github.
 
 AWS_REGION=$(aws configure get region)
 AWS_Zone="a"  #Subnet and Server AWS Availability Zone
@@ -23,7 +23,7 @@ GIT_REPO_URL="https://github.com/mongodb-partners/maap-meta-qs"
 
 TAG_NAME="MAAP-Meta-One-Click"
 
-MongoDBClusterName="MongoDBMetaV1"
+MongoDBClusterName="MongoDBMetaV2"
 MongoDBUserName="*******"
 MongoDBPassword="*******"
 APIPUBLICKEY="*******"
@@ -73,7 +73,7 @@ log_message "AWS Region: $AWS_REGION"
 create_key()
 {
   # Parameters
-  KEY_NAME="MAAPMetaKeyV5"  # You can change the key pair name as desired
+  KEY_NAME="MAAPMetaKeyV1"  # You can change the key pair name as desired.
   KEY_FILE="${KEY_NAME}.pem"
 
   # Check if the key pair exists
