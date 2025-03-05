@@ -1,0 +1,80 @@
+services:
+  logger:
+    image: public.ecr.aws/s2e1n3u8/maap-meta-qs-logger:latest
+    env_file:
+      - .env
+    environment:
+      - PORT=8181
+    deploy:
+      replicas: ${LOGGER_REPLICAS:-3}
+
+  loader:
+    image: public.ecr.aws/s2e1n3u8/maap-meta-qs-loader:latest
+    env_file:
+      - .env
+    environment:
+      - PORT=8001
+    depends_on:
+      - logger
+    deploy:
+      replicas: ${LOADER_REPLICAS:-3}
+
+  ai-memory:
+    image: public.ecr.aws/s2e1n3u8/maap-meta-qs-ai-memory:latest
+    env_file:
+      - .env
+    depends_on:
+      - logger
+    environment:
+      - PORT=8182
+    deploy:
+      replicas: ${AI_MEMORY_REPLICAS:-3}
+
+  semantic-cache:
+    image: public.ecr.aws/s2e1n3u8/maap-meta-qs-semantic-cache:latest
+    env_file:
+      - .env
+    depends_on:
+      - logger
+    environment:
+      - PORT=8183
+    deploy:
+      replicas: ${SEMANTIC_CACHE_REPLICAS:-3}
+
+  main:
+    image: public.ecr.aws/s2e1n3u8/maap-meta-qs-main:latest
+    env_file:
+      - .env
+    depends_on:
+      - logger
+      - ai-memory
+    environment:
+      - PORT=8000
+    deploy:
+      replicas: ${MAIN_REPLICAS:-3}
+
+  ui:
+    image: public.ecr.aws/s2e1n3u8/maap-meta-qs-ui:latest
+    env_file:
+      - .env
+    depends_on:
+      - loader
+      - main
+      - logger
+    environment:
+      - PORT=7860
+    deploy:
+      replicas: ${UI_REPLICAS:-3}
+
+  nginx:
+    image: public.ecr.aws/s2e1n3u8/maap-meta-qs-nginx:latest
+    container_name: nginx
+    ports:
+      - 7860:7860
+    depends_on:
+      - ui
+      - main
+      - loader
+      - logger
+      - ai-memory
+      - semantic-cache
