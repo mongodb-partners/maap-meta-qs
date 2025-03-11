@@ -40,20 +40,19 @@ async def upload(
         for key, value in inputs.items():
             logger.print(key, " = ", value)
 
-        new_files =  utils.UploadFiles(files)
+        new_files = utils.UploadFiles(files)
         logger.print(str(new_files))
 
-        vector_store =  utils.MongoDBAtlasVectorSearch_Obj(inputs)
+        vector_store = utils.MongoDBAtlasVectorSearch_Obj(inputs)
 
         try:
             documents = await loader.LoadFiles(new_files, inputs["userId"])
             MongoDBAtlasVectorSearch.add_documents(vector_store, documents)
-        except Exception as e:
-            logger.error(e)
-            return {
-                "message": "There was an error uploading the file(s)"
-                + str(traceback.TracebackException.from_exception(e).stack.format())
-            }
+        except Exception as error:
+            exc = traceback.TracebackException.from_exception(error)
+            emsg = "".join(exc.format())  # Includes stack + error message
+            logger.error(emsg)
+            return {"message": "There was an error uploading the file(s):" + emsg}
 
         WebPagesToIngest = []
         WebPagesToIngest = inputs["WebPagesToIngest"]
@@ -61,12 +60,11 @@ async def upload(
             logger.print(str(WebPagesToIngest))
             documents = await loader.LoadWeb(WebPagesToIngest, inputs["userId"])
             MongoDBAtlasVectorSearch.add_documents(vector_store, documents)
-        except Exception as e:
-            logger.error(e)
-            return {
-                "message": "There was an error uploading the webpage(s)"
-                + str(traceback.TracebackException.from_exception(e).stack.format())
-            }
+        except Exception as error:
+            exc = traceback.TracebackException.from_exception(error)
+            emsg = "".join(exc.format())  # Includes stack + error message
+            logger.error(emsg)
+            return {"message": "There was an error uploading the webpage(s):" + emsg}
         msg = [
             " ".join([file.filename, humanize.naturalsize(file.size)]) for file in files
         ]
@@ -74,13 +72,10 @@ async def upload(
         # asyncio.sleep(5) # wait for search index build
         return {"message": f"Successfully uploaded {msg}"}
     except Exception as error:
-        logger.error(str(error))
-        logger.print(str(error))
-        return {
-            "message": str(
-                traceback.TracebackException.from_exception(error).stack.format()
-            )
-        }
+        exc = traceback.TracebackException.from_exception(error)
+        emsg = "".join(exc.format())  # Includes stack + error message
+        logger.error(emsg)
+        return {"message": emsg}
 
 
 if __name__ == "__main__":

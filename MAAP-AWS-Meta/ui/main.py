@@ -145,12 +145,11 @@ async def process_request(message, history, userId, conversation_id, tools):
         else:
             yield "Hi, how may I help you?"
     except Exception as error:
-        await logger.aerror(
-            str(traceback.TracebackException.from_exception(error).stack.format())
-        )
-        yield "There was an error.\n" + str(
-            traceback.TracebackException.from_exception(error).stack.format()
-        )
+        exc = traceback.TracebackException.from_exception(error)
+        emsg = ''.join(exc.format())  # Includes stack + error message
+        await logger.aerror(emsg)
+        yield "There was an error.\n" + emsg
+
 
 
 def extract_urls(string):

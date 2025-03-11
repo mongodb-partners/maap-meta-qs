@@ -175,13 +175,12 @@ async def add_message(message: MessageInput):
         return {"message": "Message added successfully."}
 
     except Exception as error:
-        logger.error(
-            f"DB Error: {str(traceback.TracebackException.from_exception(error).stack.format())}"
-        )
+        exc = traceback.TracebackException.from_exception(error)
+        emsg = "".join(exc.format())  # Includes stack + error message
+        logger.error(emsg)
         raise HTTPException(
             status_code=500,
-            detail="Internal Server Error\n"
-            + str(traceback.TracebackException.from_exception(error).stack.format()),
+            detail="Internal Server Error\n" + emsg,
         )
 
 
@@ -368,13 +367,12 @@ async def search_memory(user_id: str, query: str):
         else:
             return {"documents": [serialize_document(doc) for doc in relevant_results]}
     except Exception as error:
-        logger.error(
-            f"{str(traceback.TracebackException.from_exception(error).stack.format())}"
-        )
+        exc = traceback.TracebackException.from_exception(error)
+        emsg = "".join(exc.format())  # Includes stack + error message
+        logger.error(emsg)
         raise HTTPException(
             status_code=500,
-            detail="Internal Server Error\n"
-            + str(traceback.TracebackException.from_exception(error).stack.format()),
+            detail="Internal Server Error\n" + emsg,
         )
 
 
@@ -445,13 +443,12 @@ async def generate_conversation_summary(documents: str):
         summary = await send_to_bedrock(prompt)
         return {"summary": summary}
     except Exception as error:
-        logger.error(
-            f"{str(traceback.TracebackException.from_exception(error).stack.format())}"
-        )
+        exc = traceback.TracebackException.from_exception(error)
+        emsg = "".join(exc.format())  # Includes stack + error message
+        logger.error(emsg)
         raise HTTPException(
             status_code=500,
-            detail="Internal Server Error\n"
-            + str(traceback.TracebackException.from_exception(error).stack.format()),
+            detail="Internal Server Error\n" + emsg,
         )
 
 
@@ -574,13 +571,12 @@ async def get_conversation_context(_id: str):
         print(conversation_with_context)
         return {"documents": conversation_with_context}
     except Exception as error:
-        logger.error(
-            f"{str(traceback.TracebackException.from_exception(error).stack.format())}"
-        )
+        exc = traceback.TracebackException.from_exception(error)
+        emsg = "".join(exc.format())  # Includes stack + error message
+        logger.error(emsg)
         raise HTTPException(
             status_code=500,
-            detail="Internal Server Error\n"
-            + str(traceback.TracebackException.from_exception(error).stack.format()),
+            detail="Internal Server Error\n" + emsg,
         )
 
 
@@ -624,13 +620,12 @@ async def retrieve_memory(user_id: str, text: str):
 
         return result
     except Exception as error:
-        logger.error(
-            f"{str(traceback.TracebackException.from_exception(error).stack.format())}"
-        )
+        exc = traceback.TracebackException.from_exception(error)
+        emsg = "".join(exc.format())  # Includes stack + error message
+        logger.error(emsg)
         raise HTTPException(
             status_code=500,
-            detail="Internal Server Error\n"
-            + str(traceback.TracebackException.from_exception(error).stack.format()),
+            detail="Internal Server Error\n" + emsg,
         )
 
 
