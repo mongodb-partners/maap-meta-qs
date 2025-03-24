@@ -1,7 +1,14 @@
 #!/bin/ksh
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+export AWS_SESSION_TOKEN=""
+
 set -e  # Exit immediately if a command exits with a non-zero status
 
 AWS_PUBLIC_ECR="public.ecr.aws/s2e1n3u8"
+AWS_REGION=$(aws configure get region)
+
+aws ecr-public get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_PUBLIC_ECR
 
 services=(
     "maap-meta-qs-main"
