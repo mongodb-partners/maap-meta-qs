@@ -1,0 +1,19 @@
+---
+title: MongoDB + Meta Llama Quickstart
+---
+flowchart LR
+User([Users]) --> UI["UI Service<br/>Gradio, port 7860"]
+subgraph ec2[AWS EC2 - Docker Compose]
+UI --> Main["Main Service<br/>multi-agent orchestration, port 8000"]
+UI --> Loader["Loader Service<br/>port 8001"]
+Main --> Memory["AI Memory Service<br/>port 8182"]
+Main --> Cache["Semantic Cache Service<br/>port 8183"]
+Main --> Logger["Logger Service<br/>port 8181"]
+end
+Main --> Llama["Meta Llama models<br/>Amazon Bedrock"]
+Loader --> Titan["Embeddings<br/>Amazon Bedrock"]
+Main <--> Atlas[("MongoDB Atlas<br/>Vector Search and Atlas Search")]
+Loader --> Atlas
+Memory --> Atlas
+Cache --> Atlas
+Logger --> Atlas

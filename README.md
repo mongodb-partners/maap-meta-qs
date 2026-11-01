@@ -54,6 +54,9 @@ This system empowers developers to create sophisticated AI applications that can
 
 ## 2. System Architecture
 
+![Architecture](docs/images/architecture.svg)
+
+
 ```mermaid
 graph TD
     A[User] -->|Interacts with| B[UI Service]
